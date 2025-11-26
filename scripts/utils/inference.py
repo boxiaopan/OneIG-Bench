@@ -168,7 +168,7 @@ class LLM2CLIP:
             self.llm_model_name, trust_remote_code=True
         )
         self.llm_model = AutoModel.from_pretrained(
-            self.llm_model_name, torch_dtype=torch.bfloat16, config=self.config, trust_remote_code=True
+            self.llm_model_name, torch_dtype=torch.bfloat16, config=self.config, trust_remote_code=False
         )
         self.tokenizer = AutoTokenizer.from_pretrained(self.llm_model_name)
         

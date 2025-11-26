@@ -7,16 +7,17 @@ start_time=$(date +%s)
 MODE=EN
 
 # image_root_dir
-IMAGE_DIR=""
+# Reorganized directory with expected category/model structure:
+IMAGE_DIR="/home/bpan/OneIG-Benchmark/images_all_models"
 
-# model list
-MODEL_NAMES=("doubao")
+# model list - now includes both omni and omni-ep variants
+MODEL_NAMES=("omni" "omni-ep")
 # model_names=("gpt-4o" "imagen4")
 
-# image grid
-IMAGE_GRID=(2)
+# image grid (one value per model) - 1 means single image, not a grid
+IMAGE_GRID=(1 1)
 
-pip install transformers==4.50.0
+# pip install transformers==4.50.0
 
 # Style Score
 

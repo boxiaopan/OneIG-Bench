@@ -4,7 +4,7 @@
 start_time=$(date +%s)
 
 # mode (EN/ZH)
-MODE=EN
+MODE=ZH
 
 # image_root_dir
 # Reorganized directory with expected category/model structure:
@@ -12,12 +12,11 @@ IMAGE_DIR="/home/bpan/OneIG-Benchmark/images_all_models"
 
 # model list - now includes both omni and omni-ep variants
 MODEL_NAMES=("omni" "omni-ep")
-# model_names=("gpt-4o" "imagen4")
 
 # image grid (one value per model) - 1 means single image, not a grid
 IMAGE_GRID=(1 1)
 
-echo "Running all evaluation scripts"
+echo "Running all evaluation scripts (ZH mode)"
 
 # pip install transformers==4.50.0
 
@@ -30,9 +29,7 @@ python -m scripts.alignment.alignment_score \
   --image_dirname "$IMAGE_DIR" \
   --model_names "${MODEL_NAMES[@]}" \
   --image_grid "${IMAGE_GRID[@]}" \
-  --class_items "anime" "human" "object" \
-
-# In ZH mode, the class_items list can be extended to include "multilingualism".
+  --class_items "anime" "human" "object" "multilingualism" \
 
 # Text Score
 
@@ -53,7 +50,7 @@ python -m scripts.diversity.diversity_score \
   --image_dirname "$IMAGE_DIR" \
   --model_names "${MODEL_NAMES[@]}" \
   --image_grid "${IMAGE_GRID[@]}" \
-  --class_items "anime" "human" "object" "text" "reasoning" \
+  --class_items "anime" "human" "object" "text" "reasoning" "multilingualism" \
 
 # Style Score
 
@@ -82,3 +79,4 @@ end_time=$(date +%s)
 duration=$((end_time - start_time))
 
 echo "✅ All evaluations finished in $duration seconds."
+

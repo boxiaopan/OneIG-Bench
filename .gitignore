@@ -3,3 +3,10 @@
 */.DS_store
 __pycache__
 **/__pycache__/
+
+*.zip
+*.log
+logs/
+models/
+images_all_models/
+results/

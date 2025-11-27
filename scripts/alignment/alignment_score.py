@@ -5,7 +5,7 @@ import megfile
 import shutil
 import pandas as pd
 from tqdm import tqdm
-from scripts.utils.utils import parse_args, split_2x2_grid, save2csv, on_rm_error
+from scripts.utils.utils import parse_args, split_2x2_grid, save2csv, on_rm_error, get_image_path
 
 import json
 from copy import deepcopy
@@ -98,8 +98,10 @@ def main():
             for model_id, model_name in enumerate(args.model_names):
                 
                 img_grid = (args.image_grid[model_id], args.image_grid[model_id])
-                 
-                image_path = megfile.smart_glob(args.image_dirname + '/' + class_item + '/' + model_name + '/' + key + '*')
+                
+                # New path structure: base/model/image_type/checkpoint/language/category/
+                image_dir = get_image_path(args.image_dirname, model_name, args.image_type, args.checkpoint, args.mode, class_item)
+                image_path = megfile.smart_glob(image_dir + '/' + key + '*')
                 
                 result = alignment_score(image_path, item["question"], item["dependency"], img_grid, cache_dir)
                 

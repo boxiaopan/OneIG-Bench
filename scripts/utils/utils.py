@@ -8,12 +8,38 @@ Image.MAX_IMAGE_PIXELS = None
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run alignment score evaluation.")
-    parser.add_argument("--mode", type=str, default="EN", help="Choose language mode.")
-    parser.add_argument("--image_dirname", type=str, default="images", help="Directory containing images.")
+    parser.add_argument("--mode", type=str, default="EN", help="Choose language mode (EN/ZH).")
+    parser.add_argument("--image_dirname", type=str, default="organized_images", help="Base directory containing organized images.")
     parser.add_argument("--model_names", type=str, nargs="+", default=["gpt-4o"], help="List of model names.")
     parser.add_argument("--image_grid", type=int, nargs="+", default=[2], help="List of image grids.")
+    parser.add_argument("--image_type", type=str, default="non-grids", help="Image type: 'grids' or 'non-grids'.")
+    parser.add_argument("--checkpoint", type=str, default="15000", help="Checkpoint number (e.g., '15000').")
     parser.add_argument("--class_items", type=str, nargs="+", default=["anime", "human", "object"], help="List of class items.")
     return parser.parse_args()
+
+
+def get_image_path(base_dir: str, model_name: str, image_type: str, checkpoint: str, mode: str, category: str = None) -> str:
+    """
+    Construct the image path based on the new directory structure.
+    
+    Structure: base_dir/model_name/image_type/checkpoint/language/[category/]
+    
+    Args:
+        base_dir: Base directory (e.g., 'organized_images')
+        model_name: Model name (e.g., 'omni', 'omni-ep')
+        image_type: 'grids' or 'non-grids'
+        checkpoint: Checkpoint number (e.g., '15000')
+        mode: Language mode ('EN' or 'ZH')
+        category: Optional category (e.g., 'anime', 'human')
+    
+    Returns:
+        Full path to the image directory
+    """
+    language = "en" if mode == "EN" else "zh"
+    if category:
+        return os.path.join(base_dir, model_name, image_type, checkpoint, language, category)
+    else:
+        return os.path.join(base_dir, model_name, image_type, checkpoint, language)
 
 def is_black_image(image):
     pixels = image.load()  

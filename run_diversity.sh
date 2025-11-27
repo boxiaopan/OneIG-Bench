@@ -6,17 +6,20 @@ start_time=$(date +%s)
 # mode (EN/ZH)
 MODE=EN
 
-# image_root_dir
-IMAGE_DIR=""
+# Base image directory (new organized structure)
+IMAGE_DIR="/home/bpan/OneIG-Benchmark/organized_images"
+
+# Image type: "grids" for 2x2 grid images, "non-grids" for single images
+IMAGE_TYPE="non-grids"
+
+# Checkpoint number
+CHECKPOINT="15000"
 
 # model list
-MODEL_NAMES=("gpt-4o")
-# model_names=("gpt-4o" "imagen4")
+MODEL_NAMES=("omni" "omni-ep")
 
-# image grid
-IMAGE_GRID=(2)
-
-pip install transformers==4.50.0
+# image grid (one value per model) - 1 means single image, 2 means 2x2 grid
+IMAGE_GRID=(1 1)
 
 # Diversity Score
 
@@ -25,6 +28,8 @@ echo "It's diversity time."
 python -m scripts.diversity.diversity_score \
   --mode "$MODE" \
   --image_dirname "$IMAGE_DIR" \
+  --image_type "$IMAGE_TYPE" \
+  --checkpoint "$CHECKPOINT" \
   --model_names "${MODEL_NAMES[@]}" \
   --image_grid "${IMAGE_GRID[@]}" \
   --class_items "anime" "human" "object" "text" "reasoning" \
@@ -36,4 +41,4 @@ rm -rf tmp_*
 end_time=$(date +%s)
 duration=$((end_time - start_time))
 
-echo "✅ All evaluations finished in $duration seconds."
+echo "✅ Diversity evaluation finished in $duration seconds."

@@ -8,5 +8,6 @@ __pycache__
 *.log
 logs/
 models/
-images_all_models/
+raw_images/
+organized_images/
 results/

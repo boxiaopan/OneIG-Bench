@@ -5,7 +5,7 @@ import megfile
 import shutil
 import pandas as pd
 from tqdm import tqdm
-from scripts.utils.utils import parse_args, split_2x2_grid, save2csv, on_rm_error
+from scripts.utils.utils import parse_args, split_2x2_grid, save2csv, on_rm_error, get_image_path
 
 from scripts.text.text_utils import preprocess_string, clean_and_remove_hallucinations, levenshtein_distance, calculate_char_match_ratio
 from scripts.utils.inference import Qwen2_5VLBatchInferencer
@@ -42,6 +42,9 @@ def main():
         
         img_grid = (args.image_grid[model_id], args.image_grid[model_id]) 
         
+        # New path structure: base/model/image_type/checkpoint/language/text/
+        image_dir = get_image_path(args.image_dirname, model_name, args.image_type, args.checkpoint, args.mode, "text")
+        
         edit_distances = []
         completion_ratios = []
         match_word_counts = []
@@ -56,7 +59,7 @@ def main():
                 
             text_gt_preprocessed = preprocess_string(text_gt)
             
-            img_path = megfile.smart_glob(args.image_dirname + '/' + model_name + '/' +  id + '*')
+            img_path = megfile.smart_glob(image_dir + '/' + id + '*')
             if len(img_path) != 1:
                 score_of_prompt_csv.loc[id, model_name] = None
             else:

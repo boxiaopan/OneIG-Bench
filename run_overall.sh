@@ -6,20 +6,29 @@ start_time=$(date +%s)
 # mode (EN/ZH)
 MODE=EN
 
-# image_root_dir
-# Reorganized directory with expected category/model structure:
-IMAGE_DIR="/home/bpan/OneIG-Benchmark/images_all_models"
+# Base image directory (new organized structure)
+IMAGE_DIR="/home/bpan/OneIG-Benchmark/organized_images"
+
+# Image type: "grids" for 2x2 grid images, "non-grids" for single images
+IMAGE_TYPE="grids"
+# IMAGE_TYPE="non-grids"
+
+# Checkpoint number
+CHECKPOINT="15000"
 
 # model list - now includes both omni and omni-ep variants
 MODEL_NAMES=("omni" "omni-ep")
-# model_names=("gpt-4o" "imagen4")
 
-# image grid (one value per model) - 1 means single image, not a grid
-IMAGE_GRID=(1 1)
+# image grid (one value per model) - 1 means single image, 2 means 2x2 grid
+# For grids, use 2; for non-grids, use 1
+IMAGE_GRID=(2 2)
 
 echo "Running all evaluation scripts"
-
-# pip install transformers==4.50.0
+echo "  Mode: $MODE"
+echo "  Image Dir: $IMAGE_DIR"
+echo "  Image Type: $IMAGE_TYPE"
+echo "  Checkpoint: $CHECKPOINT"
+echo "  Models: ${MODEL_NAMES[*]}"
 
 # Alignment Score
 
@@ -28,6 +37,8 @@ echo "It's alignment time."
 python -m scripts.alignment.alignment_score \
   --mode "$MODE" \
   --image_dirname "$IMAGE_DIR" \
+  --image_type "$IMAGE_TYPE" \
+  --checkpoint "$CHECKPOINT" \
   --model_names "${MODEL_NAMES[@]}" \
   --image_grid "${IMAGE_GRID[@]}" \
   --class_items "anime" "human" "object" \
@@ -40,7 +51,9 @@ echo "It's text time."
 
 python -m scripts.text.text_score \
   --mode "$MODE" \
-  --image_dirname "$IMAGE_DIR/text" \
+  --image_dirname "$IMAGE_DIR" \
+  --image_type "$IMAGE_TYPE" \
+  --checkpoint "$CHECKPOINT" \
   --model_names "${MODEL_NAMES[@]}" \
   --image_grid "${IMAGE_GRID[@]}" \
 
@@ -51,6 +64,8 @@ echo "It's diversity time."
 python -m scripts.diversity.diversity_score \
   --mode "$MODE" \
   --image_dirname "$IMAGE_DIR" \
+  --image_type "$IMAGE_TYPE" \
+  --checkpoint "$CHECKPOINT" \
   --model_names "${MODEL_NAMES[@]}" \
   --image_grid "${IMAGE_GRID[@]}" \
   --class_items "anime" "human" "object" "text" "reasoning" \
@@ -61,7 +76,9 @@ echo "It's style time."
 
 python -m scripts.style.style_score \
   --mode "$MODE" \
-  --image_dirname "$IMAGE_DIR/anime" \
+  --image_dirname "$IMAGE_DIR" \
+  --image_type "$IMAGE_TYPE" \
+  --checkpoint "$CHECKPOINT" \
   --model_names "${MODEL_NAMES[@]}" \
   --image_grid "${IMAGE_GRID[@]}" \
 
@@ -71,7 +88,9 @@ echo "It's reasoning time."
 
 python -m scripts.reasoning.reasoning_score \
   --mode "$MODE" \
-  --image_dirname "${IMAGE_DIR}/reasoning" \
+  --image_dirname "$IMAGE_DIR" \
+  --image_type "$IMAGE_TYPE" \
+  --checkpoint "$CHECKPOINT" \
   --model_names "${MODEL_NAMES[@]}" \
   --image_grid "${IMAGE_GRID[@]}" \
 

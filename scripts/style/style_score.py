@@ -5,7 +5,7 @@ import megfile
 import shutil
 import pandas as pd
 from tqdm import tqdm
-from scripts.utils.utils import parse_args, split_2x2_grid, save2csv, on_rm_error
+from scripts.utils.utils import parse_args, split_2x2_grid, save2csv, on_rm_error, get_image_path
 
 import torch
 torch.cuda.empty_cache()
@@ -48,7 +48,8 @@ def main():
         
         img_grid = (args.image_grid[model_id], args.image_grid[model_id]) 
         
-        image_dir = args.image_dirname + '/' + model_name
+        # New path structure: base/model/image_type/checkpoint/language/anime/
+        image_dir = get_image_path(args.image_dirname, model_name, args.image_type, args.checkpoint, args.mode, "anime")
         img_list = megfile.smart_glob(image_dir + '/*')
         img_list = sorted(img_list)
         

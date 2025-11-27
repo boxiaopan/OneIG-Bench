@@ -5,7 +5,7 @@ import megfile
 import shutil
 import pandas as pd
 from tqdm import tqdm
-from scripts.utils.utils import parse_args, split_2x2_grid, save2csv, on_rm_error
+from scripts.utils.utils import parse_args, split_2x2_grid, save2csv, on_rm_error, get_image_path
 
 import torchvision
 torchvision.disable_beta_transforms_warning()
@@ -52,7 +52,8 @@ def main():
             
             print(f"We process {class_item} now.")
             
-            image_dir = args.image_dirname + '/' + class_item + '/' + model_name
+            # New path structure: base/model/image_type/checkpoint/language/category/
+            image_dir = get_image_path(args.image_dirname, model_name, args.image_type, args.checkpoint, args.mode, class_item)
             img_list = megfile.smart_glob(image_dir + '/*')
             img_list = sorted(img_list)
             
